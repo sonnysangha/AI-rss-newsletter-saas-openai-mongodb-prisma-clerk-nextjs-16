@@ -1,14 +1,14 @@
 "use server";
 
-import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import {
   type ArticleData,
   fetchAndParseFeed,
   validateFeedUrl,
-} from "@/lib/rss-parser";
+} from "@/lib/rss/parser";
+import { wrapDatabaseOperation } from "@/lib/database/error-handler";
 import { bulkCreateRssArticles } from "./rss-article";
-import { getRssFeedsByUserId, updateFeedLastFetched } from "./rss-feed";
+import { updateFeedLastFetched } from "./rss-feed";
 
 // ============================================
 // RSS FETCH ACTIONS
@@ -18,7 +18,7 @@ import { getRssFeedsByUserId, updateFeedLastFetched } from "./rss-feed";
  * Validates an RSS URL and creates a new feed with initial article fetch
  */
 export async function validateAndAddFeed(userId: string, url: string) {
-  try {
+  return wrapDatabaseOperation(async () => {
     // Validate the RSS feed URL
     const isValid = await validateFeedUrl(url);
     if (!isValid) {
@@ -64,26 +64,14 @@ export async function validateAndAddFeed(userId: string, url: string) {
         error: "Feed created but initial fetch failed",
       };
     }
-  } catch (error) {
-    console.error("Failed to validate and add feed:", error);
-
-    // Check if it's a duplicate feed error
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2002"
-    ) {
-      throw new Error("This RSS feed has already been added");
-    }
-
-    throw new Error("Failed to add RSS feed");
-  }
+  }, "add RSS feed");
 }
 
 /**
  * Fetches an RSS feed and stores new articles
  */
 export async function fetchAndStoreFeed(feedId: string) {
-  try {
+  return wrapDatabaseOperation(async () => {
     // Get the feed details
     const feed = await prisma.rssFeed.findUnique({
       where: { id: feedId },
@@ -126,85 +114,5 @@ export async function fetchAndStoreFeed(feedId: string) {
       skipped: result.skipped,
       errors: result.errors,
     };
-  } catch (error) {
-    console.error("Failed to fetch and store feed:", error);
-    throw new Error(
-      `Failed to fetch feed: ${
-        error instanceof Error ? error.message : "Unknown error"
-      }`
-    );
-  }
-}
-
-/**
- * Fetches all active RSS feeds for a user
- */
-export async function fetchAllUserFeeds(userId: string) {
-  try {
-    const feeds = await getRssFeedsByUserId(userId);
-
-    const results = {
-      total: feeds.length,
-      successful: 0,
-      failed: 0,
-      totalArticlesCreated: 0,
-      totalArticlesSkipped: 0,
-      errors: [] as Array<{ feedId: string; error: string }>,
-    };
-
-    for (const feed of feeds) {
-      try {
-        const result = await fetchAndStoreFeed(feed.id);
-        results.successful++;
-        results.totalArticlesCreated += result.created;
-        results.totalArticlesSkipped += result.skipped;
-      } catch (error) {
-        results.failed++;
-        results.errors.push({
-          feedId: feed.id,
-          error: error instanceof Error ? error.message : "Unknown error",
-        });
-      }
-    }
-
-    return results;
-  } catch (error) {
-    console.error("Failed to fetch all user feeds:", error);
-    throw new Error("Failed to fetch user feeds");
-  }
-}
-
-/**
- * Refreshes feed metadata from the RSS source
- */
-export async function refreshFeedMetadata(feedId: string) {
-  try {
-    const feed = await prisma.rssFeed.findUnique({
-      where: { id: feedId },
-    });
-
-    if (!feed) {
-      throw new Error(`Feed with ID ${feedId} not found`);
-    }
-
-    // Fetch the RSS feed
-    const { metadata } = await fetchAndParseFeed(feed.url, feedId);
-
-    // Update feed with latest metadata
-    const updatedFeed = await prisma.rssFeed.update({
-      where: { id: feedId },
-      data: {
-        title: metadata.title,
-        description: metadata.description,
-        link: metadata.link,
-        imageUrl: metadata.imageUrl,
-        language: metadata.language,
-      },
-    });
-
-    return updatedFeed;
-  } catch (error) {
-    console.error("Failed to refresh feed metadata:", error);
-    throw new Error("Failed to refresh feed metadata");
-  }
+  }, "fetch feed");
 }

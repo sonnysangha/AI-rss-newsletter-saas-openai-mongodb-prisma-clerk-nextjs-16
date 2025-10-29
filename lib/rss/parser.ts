@@ -1,4 +1,8 @@
 import Parser from "rss-parser";
+import type { ArticleData, FeedMetadata } from "./types";
+
+// Re-export types for convenience
+export type { ArticleData, FeedMetadata };
 
 // ============================================
 // RSS PARSER UTILITIES
@@ -62,32 +66,6 @@ const parser = new Parser({
     "User-Agent": "Mozilla/5.0 (compatible; RSS Newsletter Bot/1.0)",
   },
 });
-
-/**
- * Feed metadata extracted from RSS feed
- */
-export interface FeedMetadata {
-  title: string;
-  description?: string;
-  link?: string;
-  imageUrl?: string;
-  language?: string;
-}
-
-/**
- * Article data extracted from RSS feed item
- */
-export interface ArticleData {
-  guid: string;
-  title: string;
-  link: string;
-  content?: string;
-  summary?: string;
-  pubDate: Date;
-  author?: string;
-  categories: string[];
-  imageUrl?: string;
-}
 
 /**
  * Validates if a URL returns a valid RSS feed
@@ -216,3 +194,4 @@ export async function fetchAndParseFeed(url: string, feedId: string) {
     throw error;
   }
 }
+

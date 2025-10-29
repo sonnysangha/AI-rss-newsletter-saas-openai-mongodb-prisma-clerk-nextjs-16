@@ -1,6 +1,3 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+// Re-export utilities for backwards compatibility with existing imports
+export { cn } from "./utils/cn";
+export { normalizeRssUrl } from "./utils/url";

@@ -15,8 +15,10 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { DateRangePicker, type DateRange } from "./date-range-picker";
-import { generateNewsletterWithAI } from "@/actions/generate-newsletter";
-import type { GeneratedNewsletter } from "@/actions/generate-newsletter";
+import {
+  saveGeneratedNewsletter,
+  type GeneratedNewsletter,
+} from "@/actions/generate-newsletter";
 import { NewsletterDisplay } from "./newsletter-display";
 
 interface RssFeed {
@@ -159,12 +161,12 @@ export function NewsletterForm({ feeds }: NewsletterFormProps) {
     }
 
     try {
-      await generateNewsletterWithAI({
+      await saveGeneratedNewsletter({
+        newsletter,
         feedIds: selectedFeeds,
         startDate: dateRange.from,
         endDate: dateRange.to,
         userInput: userInput.trim() || undefined,
-        shouldSave: true,
       });
 
       toast.success("Newsletter saved to history!");
