@@ -130,7 +130,7 @@ export async function getNewsletterCount(userId: string) {
 export async function getNewslettersByDateRange(
   userId: string,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ) {
   try {
     const newsletters = await prisma.newsletter.findMany({

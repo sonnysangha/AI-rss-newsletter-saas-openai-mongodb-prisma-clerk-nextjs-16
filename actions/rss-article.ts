@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 // ============================================
 // RSS ARTICLE ACTIONS
@@ -68,7 +68,7 @@ export async function bulkCreateRssArticles(
     author?: string;
     categories?: string[];
     imageUrl?: string;
-  }>
+  }>,
 ) {
   try {
     const results = {
@@ -128,7 +128,7 @@ export async function getArticlesByFeedId(feedId: string, limit = 100) {
 export async function getArticlesByDateRange(
   startDate: Date,
   endDate: Date,
-  feedIds?: string[]
+  feedIds?: string[],
 ) {
   try {
     const articles = await prisma.rssArticle.findMany({

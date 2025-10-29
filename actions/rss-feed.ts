@@ -88,7 +88,7 @@ export async function updateRssFeed(
     title?: string;
     description?: string;
     url?: string;
-  }
+  },
 ) {
   try {
     const feed = await prisma.rssFeed.update({

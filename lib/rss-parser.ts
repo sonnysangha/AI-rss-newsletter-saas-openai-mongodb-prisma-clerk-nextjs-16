@@ -62,7 +62,7 @@ export async function parseFeedUrl(url: string) {
     throw new Error(
       `Failed to fetch or parse RSS feed: ${
         error instanceof Error ? error.message : "Unknown error"
-      }`
+      }`,
     );
   }
 }
@@ -71,7 +71,7 @@ export async function parseFeedUrl(url: string) {
  * Extracts feed-level metadata from parsed RSS feed
  */
 export function extractFeedMetadata(
-  feed: Parser.Output<unknown>
+  feed: Parser.Output<unknown>,
 ): FeedMetadata {
   const feedAny = feed as any;
   return {
@@ -88,7 +88,7 @@ export function extractFeedMetadata(
  */
 export function extractArticles(
   feed: Parser.Output<unknown>,
-  feedId: string
+  feedId: string,
 ): ArticleData[] {
   return feed.items.map((item) => {
     const itemAny = item as any;
@@ -100,8 +100,8 @@ export function extractArticles(
     const pubDate = item.isoDate
       ? new Date(item.isoDate)
       : item.pubDate
-      ? new Date(item.pubDate)
-      : new Date();
+        ? new Date(item.pubDate)
+        : new Date();
 
     // Extract content - try various fields
     const content =

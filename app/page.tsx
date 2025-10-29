@@ -1,11 +1,17 @@
-import { getUsers } from "@/actions/actions";
+import { CTA } from "@/components/landing/cta";
+import { Features } from "@/components/landing/features";
+import { Hero } from "@/components/landing/hero";
+import { HowItWorks } from "@/components/landing/how-it-works";
+import { Pricing } from "@/components/landing/pricing";
 
-export default async function Home() {
-  const users = await getUsers();
-
+export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <h1>Hello {users.length}</h1>
-    </div>
+    <main className="min-h-screen bg-white dark:bg-black">
+      <Hero />
+      <Features />
+      <HowItWorks />
+      <Pricing />
+      <CTA />
+    </main>
   );
 }

@@ -109,7 +109,7 @@ export async function updateUser(
   data: {
     email?: string;
     name?: string | null;
-  }
+  },
 ) {
   try {
     const user = await prisma.user.update({
@@ -322,7 +322,7 @@ export async function updatePost(
     title?: string;
     content?: string | null;
     published?: boolean;
-  }
+  },
 ) {
   try {
     const post = await prisma.post.update({
@@ -566,7 +566,7 @@ export async function updateComment(
   commentId: string,
   data: {
     content: string;
-  }
+  },
 ) {
   try {
     const comment = await prisma.comment.update({

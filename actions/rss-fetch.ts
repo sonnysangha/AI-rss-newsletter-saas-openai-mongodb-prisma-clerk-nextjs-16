@@ -2,12 +2,12 @@
 
 import { prisma } from "@/lib/prisma";
 import {
+  type ArticleData,
   fetchAndParseFeed,
   validateFeedUrl,
-  type ArticleData,
 } from "@/lib/rss-parser";
 import { bulkCreateRssArticles } from "./rss-article";
-import { updateFeedLastFetched, getRssFeedsByUserId } from "./rss-feed";
+import { getRssFeedsByUserId, updateFeedLastFetched } from "./rss-feed";
 
 // ============================================
 // RSS FETCH ACTIONS
@@ -121,7 +121,7 @@ export async function fetchAndStoreFeed(feedId: string) {
     throw new Error(
       `Failed to fetch feed: ${
         error instanceof Error ? error.message : "Unknown error"
-      }`
+      }`,
     );
   }
 }
