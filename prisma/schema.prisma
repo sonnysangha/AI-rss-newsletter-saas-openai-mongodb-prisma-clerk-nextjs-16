@@ -13,35 +13,77 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// User model stores minimal information, relies on Clerk for authentication
 model User {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String    @unique
-  name      String?
-  posts     Post[]
-  comments  Comment[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  clerkUserId String       @unique
+  rssFeeds    RssFeed[]
+  newsletters Newsletter[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
-model Post {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  content   String?
-  published Boolean   @default(false)
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  String    @db.ObjectId
-  comments  Comment[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+/// RssFeed model stores RSS feed information and metadata
+model RssFeed {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String       @db.ObjectId
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url         String
+  title       String?
+  description String?
+  link        String?
+  imageUrl    String?
+  language    String?
+  lastFetched DateTime?
+  isActive    Boolean      @default(true)
+  articles    RssArticle[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([userId])
+  @@index([userId, isActive])
 }
 
-model Comment {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  content   String
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    String   @db.ObjectId
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  String   @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+/// RssArticle model stores individual articles from RSS feeds with deduplication
+model RssArticle {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  feedId      String    @db.ObjectId
+  feed        RssFeed   @relation(fields: [feedId], references: [id], onDelete: Cascade)
+  guid        String    @unique // RSS unique identifier for deduplication
+  title       String
+  link        String
+  content     String? // Full article content
+  summary     String? // Article summary/description
+  pubDate     DateTime
+  author      String?
+  categories  String[] // Array of category tags
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([feedId])
+  @@index([pubDate])
+  @@index([feedId, pubDate])
+}
+
+/// Newsletter model stores generated newsletters with all AI-generated content
+model Newsletter {
+  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId                 String    @db.ObjectId
+  user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  suggestedTitles        String[] // Array of 5 suggested newsletter titles
+  suggestedSubjectLines  String[] // Array of 5 suggested email subject lines
+  body                   String // Main newsletter content/body
+  topAnnouncements       String[] // Array of 5 top news announcements
+  additionalInfo         String? // Any additional information or notes
+  startDate              DateTime // Newsletter time frame start
+  endDate                DateTime // Newsletter time frame end
+  userInput              String? // User's context or additional input
+  feedsUsed              String[] @db.ObjectId // Array of RSS feed IDs used for generation
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([userId, createdAt])
+  @@index([createdAt])
 }
