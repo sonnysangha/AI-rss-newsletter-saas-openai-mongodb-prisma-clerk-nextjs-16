@@ -8,9 +8,10 @@ import type { PrepareFeedsParams } from "./types";
 // ============================================
 
 /**
- * Time threshold for considering a feed stale (3 hours)
+ * Cache window for RSS feeds (currently 3 hours = 3 * 60 * 60 * 1000 ms)
+ * Feeds are only refreshed if they haven't been fetched within this window
  */
-export const THREE_HOURS_MS = 3 * 60 * 60 * 1000;
+export const CACHE_WINDOW = 3 * 60 * 60 * 1000;
 
 /**
  * Maximum number of articles to fetch for newsletter generation
@@ -22,9 +23,7 @@ export const ARTICLE_LIMIT = 100;
  * Checks globally across all users - if ANY user fetched this URL recently, skip refresh
  * Returns array of feed IDs that should be refreshed
  */
-export async function getFeedsToRefresh(
-  feedIds: string[]
-): Promise<string[]> {
+export async function getFeedsToRefresh(feedIds: string[]): Promise<string[]> {
   const now = new Date();
 
   const feeds = await prisma.rssFeed.findMany({
@@ -60,10 +59,10 @@ export async function getFeedsToRefresh(
       continue;
     }
 
-    // Check if the most recent fetch was > 3 hours ago
+    // Check if the most recent fetch was beyond the cache window
     const timeSinceLastFetch =
       now.getTime() - mostRecentFetch.lastFetched.getTime();
-    if (timeSinceLastFetch > THREE_HOURS_MS) {
+    if (timeSinceLastFetch > CACHE_WINDOW) {
       feedsToRefresh.push(feed.id);
     }
   }
@@ -115,4 +114,3 @@ export async function prepareFeedsAndArticles(params: PrepareFeedsParams) {
 
   return articles;
 }
-
