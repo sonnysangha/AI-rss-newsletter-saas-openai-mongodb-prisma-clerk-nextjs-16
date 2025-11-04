@@ -283,7 +283,6 @@ erDiagram
         String url
         String title
         DateTime lastFetched "Cache timestamp"
-        Boolean isActive
         DateTime createdAt
     }
     
@@ -316,7 +315,6 @@ erDiagram
 ```prisma
 // RssFeed indexes
 @@index([userId])
-@@index([userId, isActive])
 
 // RssArticle indexes
 @@index([feedId])

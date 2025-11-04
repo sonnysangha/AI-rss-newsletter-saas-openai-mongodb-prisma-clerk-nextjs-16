@@ -81,10 +81,6 @@ export async function fetchAndStoreFeed(feedId: string) {
       throw new Error(`Feed with ID ${feedId} not found`);
     }
 
-    if (!feed.isActive) {
-      throw new Error(`Feed ${feedId} is not active`);
-    }
-
     // Fetch and parse the RSS feed
     const { metadata, articles } = await fetchAndParseFeed(feed.url, feedId);
 

@@ -77,23 +77,23 @@ export function NewsletterForm({ feeds }: NewsletterFormProps) {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="transition-all hover:shadow-lg">
         <CardHeader>
-          <CardTitle>Generate Newsletter</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl">Generate Newsletter</CardTitle>
+          <CardDescription className="text-base">
             Select date range, feeds, and add context to generate your
             AI-powered newsletter
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>Date Range</Label>
+            <Label className="text-base font-semibold">Date Range</Label>
             <DateRangePicker value={dateRange} onChange={setDateRange} />
           </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label>Select Feeds</Label>
+              <Label className="text-base font-semibold">Select Feeds</Label>
               {!allSelected && (
                 <Button variant="ghost" size="sm" onClick={handleSelectAll}>
                   Select All
@@ -128,9 +128,11 @@ export function NewsletterForm({ feeds }: NewsletterFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="user-input">
+            <Label htmlFor="user-input" className="text-base font-semibold">
               Additional Context{" "}
-              <span className="text-muted-foreground">(Optional)</span>
+              <span className="text-muted-foreground font-normal">
+                (Optional)
+              </span>
             </Label>
             <Textarea
               id="user-input"
@@ -149,7 +151,7 @@ export function NewsletterForm({ feeds }: NewsletterFormProps) {
           <Button
             onClick={handleGenerate}
             disabled={selectedFeeds.length === 0}
-            className="w-full"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
             size="lg"
           >
             <Sparkles className="h-4 w-4 mr-2" />

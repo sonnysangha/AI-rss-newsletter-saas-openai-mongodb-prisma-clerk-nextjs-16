@@ -3,7 +3,8 @@
 import * as React from "react";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Crown, Sparkles } from "lucide-react";
 
 export function PlanBadge() {
   const { has } = useAuth();
@@ -25,10 +26,20 @@ export function PlanBadge() {
 
   return (
     <Link href="/dashboard/pricing">
-      <Button variant="outline" size="sm" className="gap-2">
-        <span className="text-sm text-muted-foreground">Current Plan:</span>
-        <span className="font-semibold">{isPro ? "Pro" : "Starter"}</span>
-      </Button>
+      {isPro ? (
+        <Badge className="gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 transition-all cursor-pointer">
+          <Crown className="h-3.5 w-3.5" />
+          <span className="font-semibold">Pro</span>
+        </Badge>
+      ) : (
+        <Badge
+          variant="secondary"
+          className="gap-1.5 px-3 py-1.5 hover:bg-secondary/80 transition-all cursor-pointer"
+        >
+          <Sparkles className="h-3.5 w-3.5" />
+          <span className="font-semibold">Starter</span>
+        </Badge>
+      )}
     </Link>
   );
 }

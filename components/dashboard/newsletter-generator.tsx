@@ -16,10 +16,10 @@ export async function NewsletterGenerator() {
 
   if (feeds.length === 0) {
     return (
-      <Card>
+      <Card className="transition-all hover:shadow-lg">
         <CardHeader>
-          <CardTitle>Generate Newsletter</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl">Generate Newsletter</CardTitle>
+          <CardDescription className="text-base">
             Add RSS feeds first to generate newsletters
           </CardDescription>
         </CardHeader>

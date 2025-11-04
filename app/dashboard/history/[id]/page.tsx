@@ -22,15 +22,19 @@ export default async function NewsletterDetailPage({ params }: PageProps) {
 
   if (!userId) {
     return (
-      <div className="container mx-auto py-8 px-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Authentication Required</CardTitle>
-            <CardDescription>
-              Please sign in to view this newsletter.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+      <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-black dark:to-gray-950">
+        <div className="container mx-auto py-12 px-6 lg:px-8">
+          <Card className="transition-all hover:shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl">
+                Authentication Required
+              </CardTitle>
+              <CardDescription className="text-base">
+                Please sign in to view this newsletter.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -39,15 +43,17 @@ export default async function NewsletterDetailPage({ params }: PageProps) {
 
   if (!isPro) {
     return (
-      <div className="container mx-auto py-8 px-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Pro Plan Required</CardTitle>
-            <CardDescription>
-              Upgrade to Pro to access your newsletter history.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+      <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-black dark:to-gray-950">
+        <div className="container mx-auto py-12 px-6 lg:px-8">
+          <Card className="transition-all hover:shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl">Pro Plan Required</CardTitle>
+              <CardDescription className="text-base">
+                Upgrade to Pro to access your newsletter history.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
       </div>
     );
   }

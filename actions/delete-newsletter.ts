@@ -41,4 +41,3 @@ export async function deleteNewsletterAction(newsletterId: string) {
     );
   }
 }
-

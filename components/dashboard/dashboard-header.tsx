@@ -35,13 +35,15 @@ export function DashboardHeader() {
   ];
 
   return (
-    <header className="border-b bg-background">
-      <div className="container mx-auto px-4">
+    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo/Brand */}
           <div className="flex items-center gap-8">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <span className="text-xl font-bold">Newsletter AI</span>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Newsletter AI
+              </span>
             </Link>
 
             {/* Navigation */}
@@ -61,8 +63,9 @@ export function DashboardHeader() {
                       variant={isActive ? "secondary" : "ghost"}
                       size="sm"
                       className={cn(
-                        "gap-2",
-                        isActive && "bg-secondary font-medium",
+                        "gap-2 transition-all",
+                        isActive &&
+                          "bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium hover:from-blue-700 hover:to-purple-700",
                       )}
                     >
                       <Icon className="h-4 w-4" />
@@ -103,8 +106,9 @@ export function DashboardHeader() {
                   variant={isActive ? "secondary" : "ghost"}
                   size="sm"
                   className={cn(
-                    "gap-2",
-                    isActive && "bg-secondary font-medium",
+                    "gap-2 transition-all",
+                    isActive &&
+                      "bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium hover:from-blue-700 hover:to-purple-700",
                   )}
                 >
                   <Icon className="h-4 w-4" />

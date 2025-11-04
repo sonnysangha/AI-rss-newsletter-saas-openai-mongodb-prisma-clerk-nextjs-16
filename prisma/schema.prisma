@@ -64,14 +64,12 @@ model RssFeed {
   imageUrl    String?
   language    String?
   lastFetched DateTime?
-  isActive    Boolean      @default(true)
   articles    RssArticle[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
   @@unique([userId, url])
   @@index([userId])
-  @@index([userId, isActive])
 }
 
 /// RssArticle model stores individual articles from RSS feeds with deduplication

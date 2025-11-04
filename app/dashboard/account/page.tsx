@@ -1,29 +1,32 @@
 import { UserProfile } from "@clerk/nextjs";
+import { PageHeader } from "@/components/dashboard/page-header";
+import { User } from "lucide-react";
 
 export default function AccountPage() {
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Account Settings</h1>
-        <p className="text-muted-foreground mt-1">
-          Manage your account settings and profile information
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-black dark:to-gray-950">
+      <div className="container mx-auto py-12 px-6 lg:px-8 space-y-8">
+        <PageHeader
+          icon={User}
+          title="Account Settings"
+          description="Manage your account settings and profile information"
+        />
 
-      <UserProfile
-        routing="hash"
-        appearance={{
-          elements: {
-            rootBox: {
-              width: "100%",
+        <UserProfile
+          routing="hash"
+          appearance={{
+            elements: {
+              rootBox: {
+                width: "100%",
+              },
+              card: {
+                boxShadow: "none",
+                border: "1px solid hsl(var(--border))",
+              },
             },
-            card: {
-              boxShadow: "none",
-              border: "1px solid hsl(var(--border))",
-            },
-          },
-        }}
-      />
+          }}
+        />
+      </div>
     </div>
   );
 }

@@ -93,12 +93,12 @@ export function NewsletterDisplay({
   };
 
   return (
-    <Card>
+    <Card className="transition-all hover:shadow-lg">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Generated Newsletter</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-2xl">Generated Newsletter</CardTitle>
+            <CardDescription className="text-base">
               Copy sections individually or download the full newsletter
             </CardDescription>
           </div>
@@ -109,6 +109,7 @@ export function NewsletterDisplay({
                 size="sm"
                 onClick={onSave}
                 disabled={isGenerating}
+                className="hover:bg-blue-50 dark:hover:bg-blue-950 transition-all"
               >
                 <Save className="h-4 w-4 mr-2" />
                 Save
@@ -119,6 +120,7 @@ export function NewsletterDisplay({
               size="sm"
               onClick={downloadNewsletter}
               disabled={isGenerating}
+              className="hover:bg-purple-50 dark:hover:bg-purple-950 transition-all"
             >
               <Download className="h-4 w-4 mr-2" />
               Download
@@ -169,11 +171,12 @@ export function NewsletterDisplay({
           <div className="space-y-3 md:col-span-2 xl:col-span-1 xl:col-start-2 xl:row-start-1 xl:row-span-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Label className="text-base font-semibold">
-                  Newsletter Body
-                </Label>
+                <Label className="text-lg font-bold">Newsletter Body</Label>
                 {newsletter.body && (
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge
+                    variant="outline"
+                    className="text-xs border-purple-600 text-purple-600"
+                  >
                     {newsletter.body.split(/\s+/).filter(Boolean).length} words
                   </Badge>
                 )}
@@ -185,9 +188,10 @@ export function NewsletterDisplay({
                   newsletter.body && copyToClipboard(newsletter.body, "body")
                 }
                 disabled={!newsletter.body}
+                className="hover:bg-accent transition-all"
               >
                 {copiedSection === "body" ? (
-                  <Check className="h-4 w-4" />
+                  <Check className="h-4 w-4 text-green-600" />
                 ) : (
                   <Copy className="h-4 w-4" />
                 )}
@@ -224,7 +228,7 @@ export function NewsletterDisplay({
         {newsletter.additionalInfo && (
           <div className="space-y-3 mt-6">
             <div className="flex items-center justify-between">
-              <Label className="text-base font-semibold">
+              <Label className="text-lg font-bold">
                 Additional Information
               </Label>
               <Button
@@ -234,9 +238,10 @@ export function NewsletterDisplay({
                   newsletter.additionalInfo &&
                   copyToClipboard(newsletter.additionalInfo, "additional")
                 }
+                className="hover:bg-accent transition-all"
               >
                 {copiedSection === "additional" ? (
-                  <Check className="h-4 w-4" />
+                  <Check className="h-4 w-4 text-green-600" />
                 ) : (
                   <Copy className="h-4 w-4" />
                 )}
@@ -277,9 +282,7 @@ function NewsletterSection({
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <Label
-          className={
-            compact ? "text-sm font-semibold" : "text-base font-semibold"
-          }
+          className={compact ? "text-base font-bold" : "text-lg font-bold"}
         >
           {title}
         </Label>
@@ -288,9 +291,10 @@ function NewsletterSection({
           size="sm"
           onClick={() => onCopy(safeItems.join("\n"))}
           disabled={safeItems.length === 0}
+          className="hover:bg-accent transition-all"
         >
           {isCopied ? (
-            <Check className="h-4 w-4" />
+            <Check className="h-4 w-4 text-green-600" />
           ) : (
             <Copy className="h-4 w-4" />
           )}
@@ -320,7 +324,10 @@ function NewsletterSection({
               key={`${title}-${item.substring(0, 20)}-${index}`}
               className="flex items-start gap-2 animate-in fade-in slide-in-from-left-2 duration-300"
             >
-              <Badge variant="secondary" className={compact ? "text-xs" : ""}>
+              <Badge
+                variant="outline"
+                className={`${compact ? "text-xs" : ""} border-purple-600 text-purple-600`}
+              >
                 {index + 1}
               </Badge>
               <p className={`flex-1 ${compact ? "text-sm" : ""}`}>{item}</p>

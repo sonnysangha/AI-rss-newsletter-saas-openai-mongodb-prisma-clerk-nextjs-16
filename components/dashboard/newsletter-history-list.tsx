@@ -72,20 +72,19 @@ export function NewsletterHistoryList({
 
   if (newsletters.length === 0) {
     return (
-      <Card>
+      <Card className="transition-all hover:shadow-lg">
         <CardHeader>
-          <CardTitle>No Newsletters Yet</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl">No Newsletters Yet</CardTitle>
+          <CardDescription className="text-base">
             You haven't saved any newsletters yet. Generate and save your first
             newsletter to see it here.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Link
-            href="/dashboard"
-            className="text-sm text-primary hover:underline"
-          >
-            Go to Dashboard to generate a newsletter →
+          <Link href="/dashboard">
+            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+              Go to Dashboard to generate a newsletter →
+            </Button>
           </Link>
         </CardContent>
       </Card>
@@ -101,14 +100,14 @@ export function NewsletterHistoryList({
         return (
           <Card
             key={newsletter.id}
-            className="h-full hover:border-primary transition-colors group relative"
+            className="h-full hover:shadow-lg transition-all group relative border-2 hover:border-blue-600 dark:hover:border-blue-500"
           >
             <Link href={`/dashboard/history/${newsletter.id}`}>
               <div className="cursor-pointer">
                 <CardHeader>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                      <CardTitle className="text-base line-clamp-2 group-hover:text-primary transition-colors">
+                      <CardTitle className="text-lg line-clamp-2 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all">
                         {title}
                       </CardTitle>
                     </div>
@@ -116,17 +115,17 @@ export function NewsletterHistoryList({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 dark:hover:bg-red-950"
                         onClick={(e) => handleDelete(e, newsletter.id, title)}
                         disabled={isDeleting}
                       >
                         <Trash2 className="h-3.5 w-3.5 text-destructive" />
                       </Button>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
                     </div>
                   </div>
-                  <CardDescription className="flex items-center gap-2 text-xs">
-                    <Calendar className="h-3 w-3" />
+                  <CardDescription className="flex items-center gap-2 text-sm">
+                    <Calendar className="h-3.5 w-3.5" />
                     {formatDistanceToNow(new Date(newsletter.createdAt), {
                       addSuffix: true,
                     })}
@@ -135,7 +134,10 @@ export function NewsletterHistoryList({
                 <CardContent className="space-y-3">
                   {/* Date Range */}
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge
+                      variant="outline"
+                      className="text-xs border-purple-600 text-purple-600"
+                    >
                       {new Date(newsletter.startDate).toLocaleDateString(
                         "en-US",
                         {
@@ -163,7 +165,7 @@ export function NewsletterHistoryList({
                   {/* Stats */}
                   <div className="flex items-center gap-3 text-xs text-muted-foreground pt-2 border-t">
                     <div className="flex items-center gap-1">
-                      <FileText className="h-3 w-3" />
+                      <FileText className="h-3.5 w-3.5" />
                       <span>{newsletter.feedsUsed.length} feeds</span>
                     </div>
                     <div className="flex items-center gap-1">

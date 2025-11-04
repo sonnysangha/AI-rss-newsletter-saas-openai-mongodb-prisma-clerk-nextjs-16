@@ -12,14 +12,13 @@ import {
 // ============================================
 
 /**
- * Fetches all active RSS feeds for a specific user with article counts
+ * Fetches all RSS feeds for a specific user with article counts
  */
 export async function getRssFeedsByUserId(userId: string) {
   return wrapDatabaseOperation(async () => {
     return await prisma.rssFeed.findMany({
       where: {
         userId,
-        isActive: true,
       },
       include: FEED_WITH_COUNT_INCLUDE,
       orderBy: FEED_ORDER_BY_CREATED_DESC,

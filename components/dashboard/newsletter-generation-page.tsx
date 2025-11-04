@@ -208,75 +208,87 @@ export function NewsletterGenerationPage() {
   // If no params, show error
   if (!params) {
     return (
-      <div className="container mx-auto py-8 px-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Invalid Generation Request</CardTitle>
-            <CardDescription>
-              Missing required parameters for newsletter generation.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button onClick={handleBackToDashboard}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Dashboard
-            </Button>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-black dark:to-gray-950">
+        <div className="container mx-auto py-12 px-6 lg:px-8">
+          <Card className="transition-all hover:shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl">Invalid Generation Request</CardTitle>
+              <CardDescription className="text-base">
+                Missing required parameters for newsletter generation.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button
+                onClick={handleBackToDashboard}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Dashboard
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-4 px-4 space-y-4">
-      {/* Compact Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleBackToDashboard}
-            disabled={isGenerating}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
-          </Button>
-          <div className="h-4 w-px bg-border" />
-          <div>
-            <h1 className="text-xl font-semibold">Newsletter Generation</h1>
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-black dark:to-gray-950">
+      <div className="container mx-auto py-12 px-6 lg:px-8 space-y-8">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBackToDashboard}
+              disabled={isGenerating}
+              className="hover:bg-accent"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <div className="h-4 w-px bg-border" />
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Newsletter Generation
+              </h1>
+            </div>
           </div>
+          {isGenerating && (
+            <div className="flex items-center gap-2 text-base">
+              <div className="inline-flex size-8 items-center justify-center rounded-md bg-gradient-to-br from-blue-600 to-purple-600 text-white animate-pulse">
+                <Sparkles className="h-4 w-4" />
+              </div>
+              <span className="font-medium">
+                Generating
+                {articlesAnalyzed > 0 && ` (${articlesAnalyzed} articles)`}
+              </span>
+            </div>
+          )}
         </div>
-        {isGenerating && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Sparkles className="h-4 w-4 text-primary animate-pulse" />
-            <span>
-              Generating
-              {articlesAnalyzed > 0 && ` (${articlesAnalyzed} articles)`}
-            </span>
-          </div>
+
+        {/* Newsletter display */}
+        {newsletter && (
+          <NewsletterDisplay
+            newsletter={newsletter}
+            onSave={handleSave}
+            isGenerating={isGenerating}
+          />
+        )}
+
+        {/* If generation hasn't started yet */}
+        {!isGenerating && !newsletter && (
+          <Card className="transition-all hover:shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl">Preparing to Generate</CardTitle>
+              <CardDescription className="text-base">
+                Setting up newsletter generation...
+              </CardDescription>
+            </CardHeader>
+          </Card>
         )}
       </div>
-
-      {/* Newsletter display */}
-      {newsletter && (
-        <NewsletterDisplay
-          newsletter={newsletter}
-          onSave={handleSave}
-          isGenerating={isGenerating}
-        />
-      )}
-
-      {/* If generation hasn't started yet */}
-      {!isGenerating && !newsletter && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Preparing to Generate</CardTitle>
-            <CardDescription>
-              Setting up newsletter generation...
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      )}
     </div>
   );
 }

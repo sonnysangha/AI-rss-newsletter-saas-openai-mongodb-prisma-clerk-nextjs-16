@@ -128,10 +128,10 @@ export function SettingsForm({ initialSettings }: SettingsFormProps) {
   return (
     <div className="max-w-4xl space-y-6">
       {/* Basic Information */}
-      <Card>
+      <Card className="transition-all hover:shadow-lg">
         <CardHeader>
-          <CardTitle>Basic Information</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl">Basic Information</CardTitle>
+          <CardDescription className="text-base">
             Core details about your newsletter that will be used in every
             generation
           </CardDescription>
@@ -181,10 +181,10 @@ export function SettingsForm({ initialSettings }: SettingsFormProps) {
       </Card>
 
       {/* Brand Identity */}
-      <Card>
+      <Card className="transition-all hover:shadow-lg">
         <CardHeader>
-          <CardTitle>Brand Identity</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl">Brand Identity</CardTitle>
+          <CardDescription className="text-base">
             Your brand's voice and company information
           </CardDescription>
         </CardHeader>
@@ -223,10 +223,10 @@ export function SettingsForm({ initialSettings }: SettingsFormProps) {
       </Card>
 
       {/* Additional Details */}
-      <Card>
+      <Card className="transition-all hover:shadow-lg">
         <CardHeader>
-          <CardTitle>Additional Details</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl">Additional Details</CardTitle>
+          <CardDescription className="text-base">
             Extra information to enhance your newsletters
           </CardDescription>
         </CardHeader>
@@ -295,10 +295,10 @@ export function SettingsForm({ initialSettings }: SettingsFormProps) {
       </Card>
 
       {/* Sender Information */}
-      <Card>
+      <Card className="transition-all hover:shadow-lg">
         <CardHeader>
-          <CardTitle>Sender Information</CardTitle>
-          <CardDescription>Who is sending these newsletters?</CardDescription>
+          <CardTitle className="text-xl">Sender Information</CardTitle>
+          <CardDescription className="text-base">Who is sending these newsletters?</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -326,7 +326,12 @@ export function SettingsForm({ initialSettings }: SettingsFormProps) {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} disabled={isSaving} size="lg">
+        <Button
+          onClick={handleSave}
+          disabled={isSaving}
+          size="lg"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+        >
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
