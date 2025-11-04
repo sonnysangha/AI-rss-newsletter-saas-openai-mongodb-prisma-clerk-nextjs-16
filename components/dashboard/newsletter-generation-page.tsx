@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner";
 import { NewsletterDisplay } from "./newsletter-display";
+import { NewsletterLoadingCard } from "./newsletter-loading-card";
 import {
   saveGeneratedNewsletter,
   type GeneratedNewsletter,
@@ -25,13 +26,22 @@ interface GenerationParams {
   userInput?: string;
 }
 
+type LoadingPhase =
+  | "idle"
+  | "refreshing"
+  | "analyzing"
+  | "generating"
+  | "complete";
+
 export function NewsletterGenerationPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isGenerating, setIsGenerating] = React.useState(false);
+  const [loadingPhase, setLoadingPhase] = React.useState<LoadingPhase>("idle");
   const [newsletter, setNewsletter] =
     React.useState<Partial<GeneratedNewsletter> | null>(null);
   const [articlesAnalyzed, setArticlesAnalyzed] = React.useState(0);
+  const [feedCount, setFeedCount] = React.useState(0);
   const hasStartedRef = React.useRef(false);
 
   // Parse generation params from URL search params
@@ -63,11 +73,8 @@ export function NewsletterGenerationPage() {
         setIsGenerating(true);
         setNewsletter(null);
         setArticlesAnalyzed(0);
-
-        // Show generating toast
-        toast.info(
-          `Preparing ${generationParams.feedIds.length} feed${generationParams.feedIds.length > 1 ? "s" : ""}...`,
-        );
+        setFeedCount(0);
+        setLoadingPhase("idle");
 
         // Fetch streaming response
         const response = await fetch("/api/newsletter/generate-stream", {
@@ -115,14 +122,22 @@ export function NewsletterGenerationPage() {
               try {
                 const data = JSON.parse(line.slice(6));
 
-                if (data.type === "metadata") {
+                if (data.type === "refreshing") {
+                  setLoadingPhase("refreshing");
+                  setFeedCount(data.feedCount);
+                } else if (data.type === "analyzing") {
+                  setLoadingPhase("analyzing");
+                  setFeedCount(data.feedCount);
+                } else if (data.type === "metadata") {
                   localArticlesAnalyzed = data.articlesAnalyzed;
                   setArticlesAnalyzed(localArticlesAnalyzed);
-                  toast.info(`Analyzing ${localArticlesAnalyzed} articles...`);
+                  setLoadingPhase("generating");
                 } else if (data.type === "partial") {
                   // Update newsletter with partial data
                   setNewsletter(data.data);
+                  setLoadingPhase("generating");
                 } else if (data.type === "complete") {
+                  setLoadingPhase("complete");
                   toast.success(
                     `Newsletter generated from ${localArticlesAnalyzed} articles!`,
                   );
@@ -144,6 +159,7 @@ export function NewsletterGenerationPage() {
             : "Failed to generate newsletter",
         );
         setNewsletter(null);
+        setLoadingPhase("idle");
       } finally {
         setIsGenerating(false);
       }
@@ -270,17 +286,34 @@ export function NewsletterGenerationPage() {
           )}
         </div>
 
-        {/* Newsletter display */}
+        {/* Show loading card during preparation phases */}
+        {isGenerating &&
+          !newsletter &&
+          (loadingPhase === "refreshing" ||
+            loadingPhase === "analyzing" ||
+            loadingPhase === "generating") && (
+            <div className="transition-opacity duration-300 ease-in-out">
+              <NewsletterLoadingCard
+                phase={loadingPhase}
+                feedCount={feedCount}
+                articlesAnalyzed={articlesAnalyzed}
+              />
+            </div>
+          )}
+
+        {/* Newsletter display with smooth transition */}
         {newsletter && (
-          <NewsletterDisplay
-            newsletter={newsletter}
-            onSave={handleSave}
-            isGenerating={isGenerating}
-          />
+          <div className="transition-opacity duration-500 ease-in-out animate-in fade-in">
+            <NewsletterDisplay
+              newsletter={newsletter}
+              onSave={handleSave}
+              isGenerating={isGenerating}
+            />
+          </div>
         )}
 
         {/* If generation hasn't started yet */}
-        {!isGenerating && !newsletter && (
+        {!isGenerating && !newsletter && loadingPhase === "idle" && (
           <Card className="transition-all hover:shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl">Preparing to Generate</CardTitle>

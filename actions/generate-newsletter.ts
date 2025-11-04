@@ -31,6 +31,40 @@ const NewsletterSchema = z.object({
 export type GeneratedNewsletter = z.infer<typeof NewsletterSchema>;
 
 /**
+ * Prepares feeds and articles for newsletter generation
+ * Returns prepared data needed for AI generation
+ */
+export async function prepareFeedsForGeneration(params: {
+  feedIds: string[];
+  startDate: Date;
+  endDate: Date;
+  userInput?: string;
+}) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  // Get user from database
+  const user = await getUserByClerkId(userId);
+  if (!user) {
+    throw new Error("User not found in database");
+  }
+
+  // Fetch user settings
+  const settings = await getUserSettingsByUserId(user.id);
+
+  // Prepare feeds and fetch articles
+  const articles = await prepareFeedsAndArticles(params);
+
+  return {
+    user,
+    settings,
+    articles,
+  };
+}
+
+/**
  * Generates an AI-powered newsletter with streaming (real-time updates)
  * Returns a stream that progressively sends newsletter parts as they're generated
  */
@@ -78,6 +112,40 @@ export async function generateNewsletterWithAIStream(params: {
   return {
     stream: partialObjectStream,
     articlesAnalyzed: articles.length,
+  };
+}
+
+/**
+ * Generates newsletter from pre-prepared data (used for streaming with status updates)
+ */
+export async function generateNewsletterFromPreparedData(params: {
+  articles: Awaited<ReturnType<typeof prepareFeedsAndArticles>>;
+  settings: Awaited<ReturnType<typeof getUserSettingsByUserId>>;
+  startDate: Date;
+  endDate: Date;
+  userInput?: string;
+}) {
+  // Build AI prompt
+  const articleSummaries = buildArticleSummaries(params.articles);
+  const prompt = buildNewsletterPrompt({
+    startDate: params.startDate,
+    endDate: params.endDate,
+    articleSummaries,
+    articleCount: params.articles.length,
+    userInput: params.userInput,
+    settings: params.settings,
+  });
+
+  // Generate newsletter using AI streaming
+  const { partialObjectStream } = await streamObject({
+    model: openai("gpt-4o"),
+    schema: NewsletterSchema,
+    prompt,
+  });
+
+  return {
+    stream: partialObjectStream,
+    articlesAnalyzed: params.articles.length,
   };
 }
 

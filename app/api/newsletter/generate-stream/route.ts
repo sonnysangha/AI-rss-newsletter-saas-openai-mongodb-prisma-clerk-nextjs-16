@@ -1,5 +1,9 @@
 import type { NextRequest } from "next/server";
-import { generateNewsletterWithAIStream } from "@/actions/generate-newsletter";
+import {
+  prepareFeedsForGeneration,
+  generateNewsletterFromPreparedData,
+} from "@/actions/generate-newsletter";
+import { getFeedsToRefresh } from "@/lib/rss/feed-refresh";
 
 export const maxDuration = 300; // 5 minutes for Vercel Pro
 
@@ -27,20 +31,55 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Generate newsletter with streaming
-    const { stream, articlesAnalyzed } = await generateNewsletterWithAIStream({
-      feedIds,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
-      userInput,
-    });
-
-    // Create a readable stream that converts the AI stream to SSE format
+    // Create a readable stream that emits status updates and generates newsletter
     const encoder = new TextEncoder();
     const readableStream = new ReadableStream({
       async start(controller) {
         try {
-          // Send initial metadata
+          // Check which feeds need refreshing
+          const feedsToRefresh = await getFeedsToRefresh(feedIds);
+
+          // Send refreshing event if feeds need to be refreshed
+          if (feedsToRefresh.length > 0) {
+            controller.enqueue(
+              encoder.encode(
+                `data: ${JSON.stringify({
+                  type: "refreshing",
+                  feedCount: feedsToRefresh.length,
+                })}\n\n`
+              )
+            );
+          }
+
+          // Send analyzing event
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify({
+                type: "analyzing",
+                feedCount: feedIds.length,
+              })}\n\n`
+            )
+          );
+
+          // Prepare feeds and fetch articles (this does the actual refresh)
+          const { settings, articles } = await prepareFeedsForGeneration({
+            feedIds,
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
+            userInput,
+          });
+
+          // Generate newsletter with streaming
+          const { stream, articlesAnalyzed } =
+            await generateNewsletterFromPreparedData({
+              articles,
+              settings,
+              startDate: new Date(startDate),
+              endDate: new Date(endDate),
+              userInput,
+            });
+
+          // Send metadata with article count
           controller.enqueue(
             encoder.encode(
               `data: ${JSON.stringify({
