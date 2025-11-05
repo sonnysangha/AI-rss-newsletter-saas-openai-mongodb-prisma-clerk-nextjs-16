@@ -1,14 +1,14 @@
-import type { NextRequest } from "next/server";
-import { streamObject } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { streamObject } from "ai";
+import type { NextRequest } from "next/server";
 import { z } from "zod";
-import { getCurrentUser } from "@/lib/auth/helpers";
 import { getUserSettingsByUserId } from "@/actions/user-settings";
-import { prepareFeedsAndArticles } from "@/lib/rss/feed-refresh";
+import { getCurrentUser } from "@/lib/auth/helpers";
 import {
   buildArticleSummaries,
   buildNewsletterPrompt,
 } from "@/lib/newsletter/prompt-builder";
+import { prepareFeedsAndArticles } from "@/lib/rss/feed-refresh";
 
 export const maxDuration = 300; // 5 minutes for Vercel Pro
 
@@ -40,14 +40,14 @@ export async function POST(req: NextRequest) {
     if (!feedIds || !Array.isArray(feedIds) || feedIds.length === 0) {
       return Response.json(
         { error: "feedIds is required and must be a non-empty array" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!startDate || !endDate) {
       return Response.json(
         { error: "startDate and endDate are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
 
     return Response.json(
       { error: `Failed to generate newsletter: ${errorMessage}` },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

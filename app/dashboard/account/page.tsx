@@ -1,6 +1,6 @@
 import { UserProfile } from "@clerk/nextjs";
-import { PageHeader } from "@/components/dashboard/page-header";
 import { User } from "lucide-react";
+import { PageHeader } from "@/components/dashboard/page-header";
 
 export default function AccountPage() {
   return (

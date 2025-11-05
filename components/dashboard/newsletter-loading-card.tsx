@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 /**
  * Displays a simple loading state during newsletter generation
@@ -21,4 +21,3 @@ export function NewsletterLoadingCard() {
     </Card>
   );
 }
-

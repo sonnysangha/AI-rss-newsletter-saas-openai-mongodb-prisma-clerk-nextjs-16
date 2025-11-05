@@ -1,9 +1,12 @@
 "use client";
 
-import * as React from "react";
-import { Copy, Check, Download, Save } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
+import { Check, Copy, Download, Save } from "lucide-react";
+import * as React from "react";
 import ReactMarkdown from "react-markdown";
+import { toast } from "sonner";
+import type { GeneratedNewsletter } from "@/actions/generate-newsletter";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,9 +16,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import type { GeneratedNewsletter } from "@/actions/generate-newsletter";
 
 interface NewsletterDisplayProps {
   newsletter: Partial<GeneratedNewsletter>;

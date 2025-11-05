@@ -42,7 +42,7 @@ ${index + 1}. "${article.title}"
  * @returns Formatted settings string, or empty if no settings
  */
 function buildSettingsContext(
-  settings?: NewsletterPromptParams["settings"]
+  settings?: NewsletterPromptParams["settings"],
 ): string {
   if (!settings) {
     return "";
@@ -81,12 +81,12 @@ function buildSettingsContext(
   // Required Content (disclaimer and footer)
   if (settings.disclaimerText) {
     settingLines.push(
-      `Required disclaimer text to include at the end: "${settings.disclaimerText}"`
+      `Required disclaimer text to include at the end: "${settings.disclaimerText}"`,
     );
   }
   if (settings.customFooter) {
     settingLines.push(
-      `Required footer content to include at the very end: "${settings.customFooter}"`
+      `Required footer content to include at the very end: "${settings.customFooter}"`,
     );
   }
 
@@ -128,14 +128,14 @@ function buildBodyRequirements(params: NewsletterPromptParams): string[] {
   // Add disclaimer requirement if present
   if (params.settings?.disclaimerText) {
     requirements.push(
-      'Near the end, naturally incorporate the required disclaimer text WITHOUT using labels like "Disclaimer:" or "Note:" - just include the text seamlessly'
+      'Near the end, naturally incorporate the required disclaimer text WITHOUT using labels like "Disclaimer:" or "Note:" - just include the text seamlessly',
     );
   }
 
   // Add footer requirement if present
   if (params.settings?.customFooter) {
     requirements.push(
-      'At the very end, include the required footer content WITHOUT labels like "Footer:" or "Custom Footer:" - just include the content naturally with appropriate formatting (e.g., add a horizontal rule "---" before it)'
+      'At the very end, include the required footer content WITHOUT labels like "Footer:" or "Custom Footer:" - just include the content naturally with appropriate formatting (e.g., add a horizontal rule "---" before it)',
     );
   }
 
@@ -156,30 +156,30 @@ function buildImportantNotes(params: NewsletterPromptParams): string[] {
 
   if (hasUserInput) {
     notes.push(
-      "🔴 CRITICAL: The USER INSTRUCTIONS above are MANDATORY and MUST be incorporated into the newsletter"
+      "🔴 CRITICAL: The USER INSTRUCTIONS above are MANDATORY and MUST be incorporated into the newsletter",
     );
   }
 
   if (hasDisclaimer) {
     notes.push(
-      'Include the required disclaimer text near the end WITHOUT adding labels like "Disclaimer:" - weave it in naturally'
+      'Include the required disclaimer text near the end WITHOUT adding labels like "Disclaimer:" - weave it in naturally',
     );
   }
 
   if (hasFooter) {
     notes.push(
-      'Include the required footer content at the very end WITHOUT labels like "Custom Footer:" or "Footer:" - format it naturally (use "---" separator if appropriate)'
+      'Include the required footer content at the very end WITHOUT labels like "Custom Footer:" or "Footer:" - format it naturally (use "---" separator if appropriate)',
     );
   }
 
   notes.push(
     "Ensure the newsletter aligns with the target audience and brand voice specified",
-    "Follow the tone and style guidelines provided in the settings"
+    "Follow the tone and style guidelines provided in the settings",
   );
 
   if (hasUserInput) {
     notes.push(
-      "The user's specific instructions take precedence and should be clearly reflected in the content"
+      "The user's specific instructions take precedence and should be clearly reflected in the content",
     );
   }
 

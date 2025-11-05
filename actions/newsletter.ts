@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import { wrapDatabaseOperation } from "@/lib/database/error-handler";
+import { prisma } from "@/lib/prisma";
 
 // ============================================
 // NEWSLETTER ACTIONS
@@ -61,7 +61,7 @@ export async function getNewslettersByUserId(
   options?: {
     limit?: number;
     skip?: number;
-  }
+  },
 ) {
   return wrapDatabaseOperation(async () => {
     return await prisma.newsletter.findMany({

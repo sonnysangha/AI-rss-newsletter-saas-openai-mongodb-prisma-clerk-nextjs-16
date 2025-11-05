@@ -1,16 +1,16 @@
 "use server";
 
-import { streamObject } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { streamObject } from "ai";
 import { z } from "zod";
-import { createNewsletter } from "./newsletter";
-import { getCurrentUser, checkIsProUser } from "@/lib/auth/helpers";
-import { getUserSettingsByUserId } from "./user-settings";
-import { prepareFeedsAndArticles } from "@/lib/rss/feed-refresh";
+import { checkIsProUser, getCurrentUser } from "@/lib/auth/helpers";
 import {
   buildArticleSummaries,
   buildNewsletterPrompt,
 } from "@/lib/newsletter/prompt-builder";
+import { prepareFeedsAndArticles } from "@/lib/rss/feed-refresh";
+import { createNewsletter } from "./newsletter";
+import { getUserSettingsByUserId } from "./user-settings";
 
 // ============================================
 // NEWSLETTER GENERATION ACTIONS

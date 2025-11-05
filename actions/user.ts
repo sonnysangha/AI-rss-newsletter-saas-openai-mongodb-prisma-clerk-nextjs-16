@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import { wrapDatabaseOperation } from "@/lib/database/error-handler";
+import { prisma } from "@/lib/prisma";
 
 // ============================================
 // USER ACTIONS

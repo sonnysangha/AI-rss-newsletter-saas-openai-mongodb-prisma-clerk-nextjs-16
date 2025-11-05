@@ -1,8 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import type { UserSettings } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 // ============================================
 // USER SETTINGS ACTIONS
@@ -79,7 +78,7 @@ export async function getUserSettingsByUserId(userId: string) {
  */
 export async function upsertUserSettings(
   data: UserSettingsInput
-): Promise<UserSettings> {
+) {
   try {
     const { userId } = await auth();
     if (!userId) {

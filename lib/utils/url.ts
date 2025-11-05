@@ -17,4 +17,3 @@ export function normalizeRssUrl(url: string): string {
   // Otherwise, prepend https://
   return `https://${trimmedUrl}`;
 }
-

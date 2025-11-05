@@ -14,7 +14,7 @@ import { Prisma } from "@prisma/client";
  * @returns True if error is a known Prisma error
  */
 export function isPrismaError(
-  error: unknown
+  error: unknown,
 ): error is Prisma.PrismaClientKnownRequestError {
   return error instanceof Prisma.PrismaClientKnownRequestError;
 }
@@ -34,7 +34,7 @@ export function isPrismaError(
  */
 export function handlePrismaError(
   error: Prisma.PrismaClientKnownRequestError,
-  context: string
+  context: string,
 ): Error {
   switch (error.code) {
     case "P2002":
@@ -89,7 +89,7 @@ export function handleDatabaseError(error: unknown, operation: string): never {
  */
 export async function wrapDatabaseOperation<T>(
   operation: () => Promise<T>,
-  operationName: string
+  operationName: string,
 ): Promise<T> {
   try {
     return await operation();

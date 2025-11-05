@@ -1,7 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
+import { Crown, Settings as SettingsIcon } from "lucide-react";
 import { getCurrentUserSettings } from "@/actions/user-settings";
-import { SettingsForm } from "@/components/dashboard/settings-form";
 import { PageHeader } from "@/components/dashboard/page-header";
+import { PricingCards } from "@/components/dashboard/pricing-cards";
+import { SettingsForm } from "@/components/dashboard/settings-form";
 import {
   Card,
   CardContent,
@@ -9,8 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Crown, Settings as SettingsIcon } from "lucide-react";
-import { PricingCards } from "@/components/dashboard/pricing-cards";
 
 export default async function SettingsPage() {
   const { userId, has } = await auth();

@@ -63,4 +63,3 @@ export const FEED_ORDER_BY_CREATED_DESC = {
 export const NEWSLETTER_ORDER_BY_CREATED_DESC = {
   createdAt: "desc",
 } as const satisfies Prisma.NewsletterOrderByWithRelationInput;
-

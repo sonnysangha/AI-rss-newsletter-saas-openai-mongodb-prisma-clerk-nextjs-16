@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
-import { upsertUserFromClerk } from "@/actions/user";
 import { getNewsletterById } from "@/actions/newsletter";
+import { upsertUserFromClerk } from "@/actions/user";
 import { NewsletterHistoryView } from "@/components/dashboard/newsletter-history-view";
 import {
   Card,

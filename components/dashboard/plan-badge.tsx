@@ -1,10 +1,10 @@
 "use client";
 
-import * as React from "react";
 import { useAuth } from "@clerk/nextjs";
-import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { Crown, Sparkles } from "lucide-react";
+import Link from "next/link";
+import * as React from "react";
+import { Badge } from "@/components/ui/badge";
 
 export function PlanBadge() {
   const { has } = useAuth();

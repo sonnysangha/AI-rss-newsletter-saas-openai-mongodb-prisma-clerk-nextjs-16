@@ -1,7 +1,13 @@
 "use client";
 
+import { Loader2, Save, X } from "lucide-react";
 import * as React from "react";
-import { Save, Loader2, X } from "lucide-react";
+import { toast } from "sonner";
+import {
+  type UserSettingsInput,
+  upsertUserSettings,
+} from "@/actions/user-settings";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,12 +19,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import {
-  upsertUserSettings,
-  type UserSettingsInput,
-} from "@/actions/user-settings";
-import { Badge } from "@/components/ui/badge";
 
 type UserSettings = {
   id: string;

@@ -1,10 +1,10 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { deleteRssFeed } from "@/actions/rss-feed";
-import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 interface DeleteFeedButtonProps {
   feedId: string;

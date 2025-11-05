@@ -1,8 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
-import { upsertUserFromClerk } from "@/actions/user";
+import { Crown, History as HistoryIcon } from "lucide-react";
 import { getNewslettersByUserId } from "@/actions/newsletter";
+import { upsertUserFromClerk } from "@/actions/user";
 import { NewsletterHistoryList } from "@/components/dashboard/newsletter-history-list";
 import { PageHeader } from "@/components/dashboard/page-header";
+import { PricingCards } from "@/components/dashboard/pricing-cards";
 import {
   Card,
   CardContent,
@@ -10,8 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Crown, History as HistoryIcon } from "lucide-react";
-import { PricingCards } from "@/components/dashboard/pricing-cards";
 
 export default async function HistoryPage() {
   const { userId, has } = await auth();

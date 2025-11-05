@@ -1,12 +1,12 @@
 import { auth } from "@clerk/nextjs/server";
+import { getRssFeedsByUserId } from "@/actions/rss-feed";
+import { upsertUserFromClerk } from "@/actions/user";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { upsertUserFromClerk } from "@/actions/user";
-import { getRssFeedsByUserId } from "@/actions/rss-feed";
 import { NewsletterForm } from "./newsletter-form";
 
 export async function NewsletterGenerator() {

@@ -61,4 +61,3 @@ export interface PrepareFeedsParams {
   startDate: Date;
   endDate: Date;
 }
-

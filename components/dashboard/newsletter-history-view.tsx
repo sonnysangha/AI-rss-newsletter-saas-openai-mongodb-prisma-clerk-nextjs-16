@@ -1,8 +1,10 @@
 "use client";
 
-import * as React from "react";
+import { ArrowLeft, Calendar, Clock, FileText, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Calendar, FileText, Clock, Trash2 } from "lucide-react";
+import * as React from "react";
+import { toast } from "sonner";
+import { deleteNewsletterAction } from "@/actions/delete-newsletter";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,8 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { NewsletterDisplay } from "./newsletter-display";
-import { deleteNewsletterAction } from "@/actions/delete-newsletter";
-import { toast } from "sonner";
 
 interface Newsletter {
   id: string;

@@ -1,10 +1,15 @@
 "use client";
 
-import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Sparkles } from "lucide-react";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
+import { ArrowLeft, Sparkles } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+import { toast } from "sonner";
 import { z } from "zod";
+import {
+  type GeneratedNewsletter,
+  saveGeneratedNewsletter,
+} from "@/actions/generate-newsletter";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,13 +18,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { toast } from "sonner";
 import { NewsletterDisplay } from "./newsletter-display";
 import { NewsletterLoadingCard } from "./newsletter-loading-card";
-import {
-  saveGeneratedNewsletter,
-  type GeneratedNewsletter,
-} from "@/actions/generate-newsletter";
 
 /**
  * Newsletter schema for client-side streaming

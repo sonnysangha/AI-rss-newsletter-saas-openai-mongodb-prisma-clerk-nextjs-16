@@ -1,8 +1,13 @@
 "use client";
 
-import * as React from "react";
-import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
+import { Calendar, ChevronRight, FileText, Trash2 } from "lucide-react";
+import Link from "next/link";
+import * as React from "react";
+import { toast } from "sonner";
+import { deleteNewsletterAction } from "@/actions/delete-newsletter";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,11 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Calendar, FileText, ChevronRight, Trash2 } from "lucide-react";
-import { deleteNewsletterAction } from "@/actions/delete-newsletter";
-import { toast } from "sonner";
 
 interface Newsletter {
   id: string;
@@ -159,7 +159,7 @@ export function NewsletterHistoryList({
                   {/* Preview Text */}
                   <p className="text-sm text-muted-foreground line-clamp-3">
                     {newsletter.suggestedSubjectLines[0] ||
-                      newsletter.body.substring(0, 100) + "..."}
+                      `${newsletter.body.substring(0, 100)}...`}
                   </p>
 
                   {/* Stats */}

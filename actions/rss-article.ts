@@ -1,14 +1,14 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import {
-  wrapDatabaseOperation,
   isPrismaError,
+  wrapDatabaseOperation,
 } from "@/lib/database/error-handler";
 import {
-  ARTICLE_WITH_FEED_INCLUDE,
   ARTICLE_ORDER_BY_DATE_DESC,
+  ARTICLE_WITH_FEED_INCLUDE,
 } from "@/lib/database/prisma-helpers";
+import { prisma } from "@/lib/prisma";
 import type { ArticleCreateData, BulkOperationResult } from "@/lib/rss/types";
 
 // ============================================
@@ -69,7 +69,7 @@ export async function createRssArticle(data: ArticleCreateData) {
  * Bulk creates multiple RSS articles, automatically skipping duplicates based on guid
  */
 export async function bulkCreateRssArticles(
-  articles: ArticleCreateData[]
+  articles: ArticleCreateData[],
 ): Promise<BulkOperationResult> {
   const results: BulkOperationResult = {
     created: 0,
@@ -102,7 +102,7 @@ export async function getArticlesByFeedsAndDateRange(
   feedIds: string[],
   startDate: Date,
   endDate: Date,
-  limit = 100
+  limit = 100,
 ) {
   return wrapDatabaseOperation(async () => {
     const articles = await prisma.rssArticle.findMany({

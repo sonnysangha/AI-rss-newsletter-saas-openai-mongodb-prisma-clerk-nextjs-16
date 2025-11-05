@@ -31,7 +31,7 @@ type RssCategory = string | RssCategoryObject;
  * @returns Array of category strings, filtered and trimmed
  */
 function normalizeCategories(
-  rawCategories: RssCategory[] | undefined
+  rawCategories: RssCategory[] | undefined,
 ): string[] {
   if (!Array.isArray(rawCategories)) {
     return [];
@@ -92,7 +92,7 @@ export async function parseFeedUrl(url: string) {
     throw new Error(
       `Failed to fetch or parse RSS feed: ${
         error instanceof Error ? error.message : "Unknown error"
-      }`
+      }`,
     );
   }
 }
@@ -101,7 +101,7 @@ export async function parseFeedUrl(url: string) {
  * Extracts feed-level metadata from parsed RSS feed
  */
 export function extractFeedMetadata(
-  feed: Parser.Output<unknown>
+  feed: Parser.Output<unknown>,
 ): FeedMetadata {
   const feedAny = feed as any;
   return {
@@ -118,7 +118,7 @@ export function extractFeedMetadata(
  */
 export function extractArticles(
   feed: Parser.Output<unknown>,
-  feedId: string
+  feedId: string,
 ): ArticleData[] {
   return feed.items.map((item) => {
     // Type assertion for fields not in Parser.Item type definition
@@ -131,8 +131,8 @@ export function extractArticles(
     const pubDate = item.isoDate
       ? new Date(item.isoDate)
       : item.pubDate
-      ? new Date(item.pubDate)
-      : new Date();
+        ? new Date(item.pubDate)
+        : new Date();
 
     // Extract content - try various common RSS fields
     const content =
@@ -194,4 +194,3 @@ export async function fetchAndParseFeed(url: string, feedId: string) {
     throw error;
   }
 }
-

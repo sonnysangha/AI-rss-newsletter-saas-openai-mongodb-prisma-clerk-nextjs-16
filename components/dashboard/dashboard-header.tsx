@@ -1,12 +1,12 @@
 "use client";
 
+import { SignOutButton } from "@clerk/nextjs";
+import { History, Home, LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Settings, Home, LogOut, History, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SignOutButton } from "@clerk/nextjs";
-import { PlanBadge } from "./plan-badge";
 import { cn } from "@/lib/utils";
+import { PlanBadge } from "./plan-badge";
 
 export function DashboardHeader() {
   const pathname = usePathname();

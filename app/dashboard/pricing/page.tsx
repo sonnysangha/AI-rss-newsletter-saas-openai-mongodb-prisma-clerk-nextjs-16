@@ -1,4 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
+import { Crown } from "lucide-react";
+import { PricingCards } from "@/components/dashboard/pricing-cards";
 import {
   Card,
   CardContent,
@@ -6,8 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Crown } from "lucide-react";
-import { PricingCards } from "@/components/dashboard/pricing-cards";
 
 export default async function PricingPage() {
   const { has } = await auth();
