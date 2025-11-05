@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import type { Prisma, UserSettings } from "@prisma/client";
+import type { UserSettings } from "@prisma/client";
 
 // ============================================
 // USER SETTINGS ACTIONS
