@@ -94,42 +94,56 @@ export async function upsertUserSettings(
       throw new Error("User not found in database");
     }
 
-    // Upsert the settings
-    const settings = await prisma.userSettings.upsert({
+    // Check if settings exist (avoid upsert due to MongoDB free tier transaction limitation)
+    const existingSettings = await prisma.userSettings.findUnique({
       where: {
         userId: user.id,
       },
-      update: {
-        newsletterName: data.newsletterName,
-        description: data.description,
-        targetAudience: data.targetAudience,
-        defaultTone: data.defaultTone,
-        brandVoice: data.brandVoice,
-        companyName: data.companyName,
-        industry: data.industry,
-        disclaimerText: data.disclaimerText,
-        defaultTags: data.defaultTags || [],
-        customFooter: data.customFooter,
-        senderName: data.senderName,
-        senderEmail: data.senderEmail,
-        updatedAt: new Date(),
-      },
-      create: {
-        userId: user.id,
-        newsletterName: data.newsletterName,
-        description: data.description,
-        targetAudience: data.targetAudience,
-        defaultTone: data.defaultTone,
-        brandVoice: data.brandVoice,
-        companyName: data.companyName,
-        industry: data.industry,
-        disclaimerText: data.disclaimerText,
-        defaultTags: data.defaultTags || [],
-        customFooter: data.customFooter,
-        senderName: data.senderName,
-        senderEmail: data.senderEmail,
-      },
     });
+
+    let settings: Awaited<ReturnType<typeof prisma.userSettings.findUnique>>;
+    if (existingSettings) {
+      // Update existing settings
+      settings = await prisma.userSettings.update({
+        where: {
+          userId: user.id,
+        },
+        data: {
+          newsletterName: data.newsletterName,
+          description: data.description,
+          targetAudience: data.targetAudience,
+          defaultTone: data.defaultTone,
+          brandVoice: data.brandVoice,
+          companyName: data.companyName,
+          industry: data.industry,
+          disclaimerText: data.disclaimerText,
+          defaultTags: data.defaultTags || [],
+          customFooter: data.customFooter,
+          senderName: data.senderName,
+          senderEmail: data.senderEmail,
+          updatedAt: new Date(),
+        },
+      });
+    } else {
+      // Create new settings
+      settings = await prisma.userSettings.create({
+        data: {
+          userId: user.id,
+          newsletterName: data.newsletterName,
+          description: data.description,
+          targetAudience: data.targetAudience,
+          defaultTone: data.defaultTone,
+          brandVoice: data.brandVoice,
+          companyName: data.companyName,
+          industry: data.industry,
+          disclaimerText: data.disclaimerText,
+          defaultTags: data.defaultTags || [],
+          customFooter: data.customFooter,
+          senderName: data.senderName,
+          senderEmail: data.senderEmail,
+        },
+      });
+    }
 
     return settings;
   } catch (error) {
